@@ -24,19 +24,15 @@
 
           rustToolchain = pkgs.rust-bin.stable.latest.default.override {
             extensions = [ "rust-src" "rust-analyzer" "clippy" ];
-            # 必要に応じてターゲットを追加
-            # targets = [ "wasm32-unknown-unknown" ];
           };
         in
         {
           default = pkgs.mkShell {
             buildInputs = [
               rustToolchain
-            ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-              pkgs.darwin.apple_sdk.frameworks.Security
-              pkgs.darwin.apple_sdk.frameworks.CoreFoundation
-              pkgs.iconv
+              pkgs.lldb
             ];
+            RUST_SRC_PATH = "${rustToolchain}/lib/rustlib/src/rust/library";
           };
         });
     };
